@@ -32,7 +32,7 @@ input,textarea,select{font-family:inherit;font-size:1rem;}
 .btn-dark-outline:hover{background:var(--moss);color:var(--white);}
 .btn-sm{padding:11px 22px;font-size:0.88rem;}
 
-header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;transition:all .4s ease;}
+header#site-header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;transition:all .4s ease;}
 header.scrolled{background:rgba(247,243,234,0.92);backdrop-filter:blur(14px);box-shadow:0 4px 24px rgba(43,43,38,0.08);padding:12px 0;}
 .nav-wrap{display:flex;align-items:center;justify-content:space-between;}
 .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:1.4rem;color:var(--white);}
