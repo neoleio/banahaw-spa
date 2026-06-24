@@ -9,6 +9,8 @@ export default function PublicSite() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [bookingStatus, setBookingStatus] = useState('idle') // idle | sending | sent | error
+  const [feedbackStatus, setFeedbackStatus] = useState('idle')
+  const [selectedRating, setSelectedRating] = useState(0)
 
   useEffect(() => {
     loadAll()
@@ -57,10 +59,34 @@ export default function PublicSite() {
     }
   }
 
+  async function handleFeedbackSubmit(e) {
+    e.preventDefault()
+    if (selectedRating === 0) {
+      alert('Please select a star rating before submitting.')
+      return
+    }
+    setFeedbackStatus('sending')
+    const form = e.target
+    const payload = {
+      name: form.fbname.value,
+      rating: selectedRating,
+      comment: form.fbcomment.value,
+    }
+    const { error } = await supabase.from('feedback').insert([payload])
+    if (error) {
+      setFeedbackStatus('error')
+    } else {
+      setFeedbackStatus('sent')
+      form.reset()
+      setSelectedRating(0)
+      setTimeout(() => setFeedbackStatus('idle'), 4000)
+    }
+  }
+
   const c = (key, fallback = '') => content[key] || fallback
 
   if (loading) {
-    return <div className="site-loading">🌿 Loading Banahaw Spa…</div>
+    return <div className="site-loading">🌿 Loading Banahaw Heal Spa…</div>
   }
 
   return (
@@ -71,7 +97,7 @@ export default function PublicSite() {
         <div className="container nav-wrap">
           <a href="#hero" className="logo">
             <svg viewBox="0 0 48 48" fill="none"><path d="M24 4C24 4 10 18 10 30C10 38.5 16.5 44 24 44C31.5 44 38 38.5 38 30C38 18 24 4 24 4Z" fill="currentColor" opacity="0.16"/><path d="M24 4C24 4 10 18 10 30C10 38.5 16.5 44 24 44C31.5 44 38 38.5 38 30C38 18 24 4 24 4Z" stroke="currentColor" strokeWidth="1.6"/></svg>
-            <span>Banahaw Spa<span className="tagline">Calamba City, Laguna</span></span>
+            <span>Banahaw Heal Spa<span className="tagline">Calamba City, Laguna</span></span>
           </a>
           <nav>
             <ul>
@@ -108,7 +134,7 @@ export default function PublicSite() {
           <div className="hero-bg"></div>
           <div className="hero-overlay"></div>
           <div className="container hero-content">
-            <span className="eyebrow">Banahaw Spa · Calamba City, Laguna</span>
+            <span className="eyebrow">Banahaw Heal Spa · Calamba City, Laguna</span>
             <h1>{c('hero_headline', 'Relax, Rejuvenate, and Restore Your Well-Being')}</h1>
             <p className="sub">{c('hero_subheadline')}</p>
             <div className="hero-ctas">
@@ -200,7 +226,7 @@ export default function PublicSite() {
           <div className="container">
             <div className="section-head center">
               <span className="eyebrow" style={{ justifyContent: 'center' }}>Visit Us</span>
-              <h2>Find your way to Banahaw Spa</h2>
+              <h2>Find your way to Banahaw Heal Spa</h2>
             </div>
             <div className="contact-info-card" style={{ maxWidth: 600, margin: '0 auto' }}>
               <div className="contact-row"><div><strong>Address</strong><span>{c('address')}</span></div></div>
@@ -210,12 +236,50 @@ export default function PublicSite() {
             </div>
           </div>
         </section>
+
+        <section className="section-sage" id="feedback">
+          <div className="container">
+            <div className="section-head center">
+              <span className="eyebrow" style={{ justifyContent: 'center' }}>Tell Us About Your Visit</span>
+              <h2>Share your feedback</h2>
+              <p>Had a session with us? We'd love to hear how it went — your feedback helps us improve.</p>
+            </div>
+            <form className="feedback-form-standalone" onSubmit={handleFeedbackSubmit}>
+              <div className="form-group">
+                <label>Your Name (optional)</label>
+                <input name="fbname" placeholder="Juan Dela Cruz" />
+              </div>
+              <div className="form-group">
+                <label>Your Rating</label>
+                <div className="star-picker">
+                  {[1, 2, 3, 4, 5].map(n => (
+                    <button
+                      type="button"
+                      key={n}
+                      className={`star-btn ${n <= selectedRating ? 'filled' : ''}`}
+                      onClick={() => setSelectedRating(n)}
+                      aria-label={`${n} star${n > 1 ? 's' : ''}`}
+                    >★</button>
+                  ))}
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Your Feedback</label>
+                <textarea name="fbcomment" placeholder="Tell us about your experience…" required></textarea>
+              </div>
+              <button type="submit" className="btn btn-primary" disabled={feedbackStatus === 'sending'}>
+                {feedbackStatus === 'sending' ? 'Sending…' : feedbackStatus === 'sent' ? 'Thank You ✓' : 'Submit Feedback'}
+              </button>
+              {feedbackStatus === 'error' && <p className="form-error">Something went wrong — please try again.</p>}
+            </form>
+          </div>
+        </section>
       </main>
 
       <footer>
         <div className="container">
           <div className="footer-bottom">
-            <span>© 2026 Banahaw Spa, Calamba City, Laguna. All rights reserved.</span>
+            <span>© 2026 Banahaw Heal Spa, Calamba City, Laguna. All rights reserved.</span>
           </div>
         </div>
       </footer>

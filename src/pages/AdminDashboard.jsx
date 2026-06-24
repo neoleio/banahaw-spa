@@ -4,9 +4,11 @@ import BookingsTab from '../components/admin/BookingsTab'
 import ServicesTab from '../components/admin/ServicesTab'
 import GalleryTab from '../components/admin/GalleryTab'
 import ContentTab from '../components/admin/ContentTab'
+import FeedbackTab from '../components/admin/FeedbackTab'
 
 const TABS = [
   { key: 'bookings', label: 'Bookings' },
+  { key: 'feedback', label: 'Feedback' },
   { key: 'services', label: 'Services & Prices' },
   { key: 'gallery', label: 'Gallery' },
   { key: 'content', label: 'Site Text' },
@@ -19,7 +21,7 @@ export default function AdminDashboard() {
   return (
     <div className="admin-shell">
       <header className="admin-topbar">
-        <div className="admin-topbar-logo">🌿 Banahaw Spa — Admin</div>
+        <div className="admin-topbar-logo">🌿 Banahaw Heal Spa — Admin</div>
         <a href="/" target="_blank" rel="noopener" className="admin-view-site">View Live Site ↗</a>
         <button className="admin-signout" onClick={signOut}>Sign Out</button>
       </header>
@@ -37,6 +39,7 @@ export default function AdminDashboard() {
         </nav>
         <main className="admin-content">
           {active === 'bookings' && <BookingsTab />}
+          {active === 'feedback' && <FeedbackTab />}
           {active === 'services' && <ServicesTab />}
           {active === 'gallery' && <GalleryTab />}
           {active === 'content' && <ContentTab />}

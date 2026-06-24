@@ -26,7 +26,7 @@ export default function AdminLogin() {
   return (
     <div className="admin-login-wrap">
       <form className="admin-login-card" onSubmit={handleSubmit}>
-        <div className="admin-login-logo">🌿 Banahaw Spa</div>
+        <div className="admin-login-logo">🌿 Banahaw Heal Spa</div>
         <h1>Admin Dashboard</h1>
         <p className="admin-login-sub">Sign in to manage your site</p>
         {error && <div className="admin-error">{error}</div>}
